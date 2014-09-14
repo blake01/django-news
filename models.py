@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from autoslug import AutoSlugField
+from j29.university.society.models import LibraryImage
 
 
 class ArticleManager(models.Manager):
@@ -47,6 +48,7 @@ class Article(models.Model):
         help_text="Only live sites with dates today or in the past will be shown.",
         default=True,
     )
+    image = models.ForeignKey(LibraryImage)
     objects = ArticleManager()
 
     def __unicode__(self):
