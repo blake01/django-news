@@ -1,7 +1,5 @@
 from django.views.generic import DetailView, ListView
-from django.db.models.loading import get_model
-from django.conf import settings
-from news.models import Article
+from news.models import get_article_model
 
 
 class ActiveArticlesMixin(object):
@@ -9,10 +7,7 @@ class ActiveArticlesMixin(object):
     for use in the views below"""
 
     def get_queryset(self):
-        app = getattr(settings, 'NEWS_APP', 'news')
-        model_name = getattr(settings, 'NEWS_MODEL', 'Article')
-        model = get_model(app, model_name)
-        assert(issubclass(model, Article))
+        model = get_article_model()
         return model.objects.active()
 
 

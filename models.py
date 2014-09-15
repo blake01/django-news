@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.db.models.loading import get_model
+from django.conf import settings
 from autoslug import AutoSlugField
-from j29.university.society.models import LibraryImage
 
 
 class ArticleManager(models.Manager):
@@ -48,7 +49,6 @@ class Article(models.Model):
         help_text="Only live sites with dates today or in the past will be shown.",
         default=True,
     )
-    image = models.ForeignKey(LibraryImage)
     objects = ArticleManager()
 
     def __unicode__(self):
@@ -64,3 +64,11 @@ class Article(models.Model):
 
     class Meta:
         ordering = ['-date']
+
+
+def get_article_model():
+    app = getattr(settings, 'NEWS_APP', 'news')
+    model_name = getattr(settings, 'NEWS_MODEL', 'Article')
+    model = get_model(app, model_name)
+    assert(issubclass(model, Article))
+    return model
