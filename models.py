@@ -35,7 +35,7 @@ class ArticleManager(models.Manager):
                 return self.active()
 
 
-class Article(models.Model):
+class ArticleBase(models.Model):
     """
     Article is a bulletin with a title, date and content.
     It may or not be live.
@@ -64,11 +64,15 @@ class Article(models.Model):
 
     class Meta:
         ordering = ['-date']
+        abstract = True
+
+
+class Article(ArticleBase):
+    pass
 
 
 def get_article_model():
     app = getattr(settings, 'NEWS_APP', 'news')
     model_name = getattr(settings, 'NEWS_MODEL', 'Article')
     model = get_model(app, model_name)
-    assert(issubclass(model, Article))
     return model

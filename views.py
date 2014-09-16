@@ -13,6 +13,7 @@ class ActiveArticlesMixin(object):
 
 class NewsListView(ActiveArticlesMixin, ListView):
     context_object_name = 'articles'
+    template_name = 'news/article_list.html'
 
 
 class NewsArchiveView(NewsListView):
@@ -23,3 +24,4 @@ class NewsArchiveView(NewsListView):
 
 class NewsDetailView(ActiveArticlesMixin, DetailView):
     context_object_name = 'article'
+    template_name = 'news/article_detail.html'

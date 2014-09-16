@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from news.models import Article
+from news.models import get_article_model, ArticleBase
 import datetime
+
+Article = get_article_model()
 
 
 class EmptyDbTestCase(TestCase):
@@ -11,9 +13,14 @@ class EmptyDbTestCase(TestCase):
         latest = Article.objects.latest()
         self.assertEqual(latest, None)
 
+    def test_article_model_is_subclass(self):
+        self.assertTrue(issubclass(Article, ArticleBase))
+
+
 class NewsTestCase(TestCase):
 
     def setUp(self):
+
         Article.objects.create(
             title="Past Draft",
             date=datetime.date.today() - datetime.timedelta(days=10),
