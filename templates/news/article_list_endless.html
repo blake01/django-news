@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block page-title %}News Articles{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+  <h1>Latest News</h1>
+  {% include page_template %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+    <script>$.endlessPaginate({paginateOnScroll: true});</script>
+{% endblock %}

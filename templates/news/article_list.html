@@ -5,11 +5,11 @@
 {% block content %}
 
 <div class="container-fluid">
-  <h1 id="paginator-h1">Latest News</h1>
+  <h1>Latest News</h1>
   <div class="clearfix"></div>
   {% for article in articles %}
   <div class="row">
-    <div class="col-md-12 article" id="{{ concert.pk }}">
+    <div class="col-md-12 article">
       {% include 'news/article_fragment.html' %}
       <a class="btn btn-default" href="{% url 'article_detail' slug=article.slug %}">Permalink »</a>
     </div>
