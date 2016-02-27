@@ -42,7 +42,7 @@ class ArticleBase(models.Model):
     Forms the basis of blog posts, news articles and message board posts.
     """
     title = models.CharField(max_length=128)
-    slug = AutoSlugField(populate_from='title')
+    slug = AutoSlugField(populate_from='title', unique=True)
     date = models.DateField()
     content = models.TextField()
     live = models.BooleanField(
