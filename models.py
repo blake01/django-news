@@ -1,7 +1,13 @@
 from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from django.db.models.loading import get_model
+try:
+    # Django <1.7
+    from django.db.models.loading import get_model
+except ImportError:
+    # Django 1.7+
+    from django.apps import apps
+    get_model = apps.get_model
 from django.conf import settings
 from autoslug import AutoSlugField
 

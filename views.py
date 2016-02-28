@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView
-from endless_pagination.views import AjaxListView
+from el_pagination.views import AjaxListView
 from news.models import get_article_model
 
 
