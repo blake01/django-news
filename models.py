@@ -51,14 +51,12 @@ class ArticleBase(models.Model):
     slug = AutoSlugField(populate_from='title', unique=True)
     date = models.DateField()
     content = models.TextField()
-    live = models.BooleanField(
-        help_text="Only live sites with dates today or in the past will be shown.",
-        default=True,
-    )
+    ht = "Only live articles with dates today or in the past will be shown."
+    live = models.BooleanField(help_text=ht, default=True)
     objects = ArticleManager()
 
     def __unicode__(self):
-        return '%s - %s'%(self.title, self.date)
+        return '%s - %s' % (self.title, self.date)
 
     def get_absolute_url(self):
         return reverse('article_detail', kwargs={'slug': self.slug})

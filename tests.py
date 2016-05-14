@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from news.models import get_article_model, ArticleBase
 import datetime
+from autofixture import AutoFixture
+
 
 Article = get_article_model()
 
@@ -20,39 +22,40 @@ class EmptyDbTestCase(TestCase):
 class NewsTestCase(TestCase):
 
     def setUp(self):
-
-        Article.objects.create(
-            title="Past Draft",
-            date=datetime.date.today() - datetime.timedelta(days=10),
-            content="x",
-            live = False
-        )
-        Article.objects.create(
-            title="Past Live 1",
-            date=datetime.date(2013, 12, 25),
-            content="x",
-        )
-        Article.objects.create(
-            title="Past Live 2",
-            date=datetime.date.today() - datetime.timedelta(days=7),
-            content="x",
-        )
-        Article.objects.create(
-            title="Past Live 3",
-            date=datetime.date.today() - datetime.timedelta(days=5),
-            content="x",
-        )
-        Article.objects.create(
-            title="Future Draft",
-            date=datetime.date.today() + datetime.timedelta(days=10),
-            content="x",
-            live = False
-        )
-        Article.objects.create(
-            title="Future Live",
-            date=datetime.date.today() + datetime.timedelta(days=10),
-            content="x",
-        )
+        """Use autofixture to help set up initial data. """
+        field_values_list = [
+            {
+                'title': "Past Draft",
+                'date': datetime.date.today() - datetime.timedelta(days=10),
+                'live': False
+            },
+            {
+                'title': "Past Live 1",
+                'date': datetime.date(2013, 12, 25),
+            },
+            {
+                'title': "Past Live 2",
+                'date': datetime.date.today() - datetime.timedelta(days=7),
+            },
+            {
+                'title': "Past Live 3",
+                'date': datetime.date.today() - datetime.timedelta(days=5),
+            },
+            {
+                'title': "Future Draft",
+                'date': datetime.date.today() + datetime.timedelta(days=10),
+                'live': False
+            },
+            {
+                'title': "Future Live",
+                'date': datetime.date.today() + datetime.timedelta(days=10),
+                'live': True
+            },
+        ]
+        for f in field_values_list:
+            f['slug'] = None
+            fixture = AutoFixture(Article, generate_fk=True, field_values=f)
+            entry = fixture.create(1)
 
     def test_autoslug(self):
         l1 = Article.objects.get(title="Past Live 1")
@@ -101,9 +104,13 @@ class NewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_article_year_archive(self):
-        response = self.client.get(reverse('article_year_archive', kwargs={'year': '2013'}))
+        response = self.client.get(
+            reverse('article_year_archive', kwargs={'year': '2013'})
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_article_detail(self):
-        response = self.client.get(reverse('article_detail', kwargs={'slug': 'past-live-1'}))
+        response = self.client.get(
+            reverse('article_detail', kwargs={'slug': 'past-live-1'})
+        )
         self.assertEqual(response.status_code, 200)
