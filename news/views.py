@@ -6,7 +6,6 @@ from news.models import get_article_model
 class ActiveArticlesMixin(object):
     """Retrieve the appropriate model (models.Article or a subclass)
     for use in the views below"""
-
     def get_queryset(self):
         model = get_article_model()
         return model.objects.active()
